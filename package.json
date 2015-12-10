@@ -1,0 +1,25 @@
+{
+  "name": "oc-grades",
+  "version": "1.0.0",
+  "description": "Sends everyone in O'Connell's Chemistry Honors class an email when O'Connell decides to update the gradebook.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gunnengineeringclub/oc-grades.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gunnengineeringclub/oc-grades/issues"
+  },
+  "homepage": "https://github.com/gunnengineeringclub/oc-grades#readme",
+  "dependencies": {
+    "dotenv": "^1.2.0",
+    "express": "^4.13.3",
+    "request": "^2.67.0",
+    "sendgrid": "^2.0.0"
+  }
+}
