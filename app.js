@@ -1,13 +1,22 @@
-
+var colors = require('colors'); // pretty console colors
+var dotenv = require('dotenv'); // Requires .env file with API keys
+dotenv.load();
+var sendgrid = require('sendgrid')(process.env.MAILKEY);
+var Firebase = require('firebase');
+var listdb = new Firebase(process.env.DBHOST);
 var http = require('http');
 
-var currentDate = "";
+var currentDate = "test";
 getLastUpdated();
+
 // console.log(getLastUpdated());
 
 var interval = setInterval(function() {
-  console.log("test");
-  console.log(currentDate);
+  // console.log("test");
+  // console.log(currentDate);
+  getLastUpdated();
+
+
 }, 1000);
 
 
@@ -30,28 +39,30 @@ function getLastUpdated()
       //the whole response has been recieved, so we just print it out here
       response.on('end', function () {
         // console.log(str);
+        str = str.toString();
         var location = str.search("updated:");
-        // console.log(location);
+        // console.log(typeof location);
         dateLast = str.substring(location-2,str.length);
+
+
+        if(currentDate != dateLast && currentDate != "test")
+        {
+            console.log("email");
+        }
+        else {
+            // console.log("same");
+        }
+
         currentDate = dateLast;
-        // console.log(str);
-        // console.log(dateLast.substring(14,dateLast.length));
+
+
+
       });
     };
     http.request(options, callback).end();
 }
 
 //The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
-
-var colors = require('colors'); // pretty console colors
-var dotenv = require('dotenv'); // Requires .env file with API keys
-dotenv.load();
-var sendgrid = require('sendgrid')(process.env.MAILKEY);
-var Firebase = require('firebase');
-var listdb = new Firebase(process.env.DBHOST);
-
-alertUsers(); // call this function when you want to tell everyone about the new OC grades
-
 
 
 // sends an email to all of the addresses registered in the firebase.
