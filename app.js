@@ -25,8 +25,10 @@ function getLastUpdated()
 {
     var dateLast;
     var options = {
-      host: 'staff.pausd.org',
-      path: 'http://staff.pausd.org/~coconnell/Grades/frame1.html'
+    //   host: 'staff.pausd.org',
+    //   path: 'http://staff.pausd.org/~coconnell/Grades/frame1.html'
+    host: 'output.jsbin.com',
+    path: 'https://output.jsbin.com/powapefixo'
     };
     callback = function(response) {
       var str = '';
@@ -47,10 +49,12 @@ function getLastUpdated()
 
         if(currentDate != dateLast && currentDate != "test")
         {
-            console.log("email");
+            // console.log("email");
+            alertUsers();
         }
         else {
             // console.log("same");
+            // console.log(currentDate);
         }
 
         currentDate = dateLast;
