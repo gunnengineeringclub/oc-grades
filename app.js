@@ -1,9 +1,8 @@
 var colors = require('colors'); // pretty console colors
 var dotenv = require('dotenv'); // Requires .env file with API keys
 dotenv.load();
+var request = require('request');
 var sendgrid = require('sendgrid')(process.env.MAILKEY);
-var Firebase = require('firebase');
-var listdb = new Firebase(process.env.DBHOST);
 var http = require('http');
 
 var currentDate = "test";
@@ -12,8 +11,7 @@ getLastUpdated();
 // console.log(getLastUpdated());
 
 var interval = setInterval(function() {
-  // console.log("test");
-  // console.log(currentDate);
+
   getLastUpdated();
 
 
@@ -66,23 +64,22 @@ function getLastUpdated()
     http.request(options, callback).end();
 }
 
-//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
-
 
 // sends an email to all of the addresses registered in the firebase.
 function alertUsers() {
   // get user emails
-  listdb.once('value', function (s) {
-    var list = s.val();
-    var num_emails = 0;
-    for (var e in list) {
-      num_emails++;
+  request(process.env.DBHOST, function (err, res, body) {
+    var gform_data = JSON.parse(body).result;
+    var emails = [];
+    for (var i = 0; i < gform_data.length; i++) {
+      emails.push(gform_data[i]["What's your email?"]);
     }
-    console.log("Sending to update to ".blue + num_emails.toString().magenta + " students...".blue);
 
-    for (var email_key in list) {
+    console.log("Sending to update to ".blue + emails.length.toString().magenta + " students...".blue);
+
+    for (var x = 0; x < emails.length; x++) {
       sendgrid.send({
-          to:       list[email_key],
+          to:       emails[x],
           from:     'oconnellgradeupdate@chemistry.xyz',
           fromname: 'Chemistry H Updates',
           subject:  "O'Connell Grades Posted",
@@ -91,6 +88,6 @@ function alertUsers() {
           if (err) { return console.error(err); }
         });
     }
-    console.log(("Successfully sent emails to all " + num_emails + " students.").green)
+    console.log(("Successfully sent emails to all " + emails.length.toString() + " students.").green);
   });
 }
